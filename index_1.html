@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recordatorio con Notificación</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Si deseas agregar estilos en el futuro -->
+    <script defer src="script.js"></script> <!-- Cargar el archivo script.js -->
+</head>
+<body>
+    <h1>Agrega un Recordatorio</h1>
+
+    <form id="recordatorioForm">
+        <label for="titulo">Título del Recordatorio:</label>
+        <input type="text" id="titulo" name="titulo" required>
+        <br><br>
+
+        <label for="fechaHora">Fecha y Hora (dd/mm/yyyy hh:mm):</label>
+        <input type="text" id="fechaHora" name="fechaHora" required placeholder="22/10/2024 18:00">
+        <br><br>
+
+        <button type="submit">Agregar Recordatorio</button>
+    </form>
+
+    <p id="mensaje"></p>
+</body>
+</html>
