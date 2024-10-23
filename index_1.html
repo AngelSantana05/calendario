@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recordatorio con Notificación</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Si deseas agregar estilos en el futuro -->
-    <script defer src="script.js"></script> <!-- Cargar el archivo script.js -->
+    <title>Calendario con Notificaciones Push</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Vincular el archivo CSS -->
+    <script defer src="script.js"></script> <!-- Cargar el archivo JavaScript -->
 </head>
 <body>
-    <h1>Agrega un Recordatorio</h1>
+    <h1>Calendario de Eventos</h1>
+    <form id="eventForm">
+        <label for="eventName">Nombre del evento:</label>
+        <input type="text" id="eventName" name="eventName" required><br><br>
 
-    <form id="recordatorioForm">
-        <label for="titulo">Título del Recordatorio:</label>
-        <input type="text" id="titulo" name="titulo" required>
-        <br><br>
+        <label for="eventDate">Fecha del evento:</label>
+        <input type="datetime-local" id="eventDate" name="eventDate" required><br><br>
 
-        <label for="fechaHora">Fecha y Hora (dd/mm/yyyy hh:mm):</label>
-        <input type="text" id="fechaHora" name="fechaHora" required placeholder="22/10/2024 18:00">
-        <br><br>
-
-        <button type="submit">Agregar Recordatorio</button>
+        <button type="submit">Agregar Evento</button>
     </form>
 
     <p id="mensaje"></p>

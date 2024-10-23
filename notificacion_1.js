@@ -1,4 +1,15 @@
-// Pedir permiso para enviar notificaciones
+// Verificar si el navegador soporta Service Workers
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+        .then((registration) => {
+            console.log('Service Worker registrado con éxito:', registration);
+        })
+        .catch((error) => {
+            console.error('Error al registrar el Service Worker:', error);
+        });
+}
+
+// Solicitar permiso para notificaciones
 function pedirPermisoNotificaciones() {
     if ("Notification" in window) {
         Notification.requestPermission().then(function(permission) {
@@ -13,17 +24,14 @@ function pedirPermisoNotificaciones() {
     }
 }
 
-// Función para convertir la fecha en formato dd/mm/yyyy hh:mm a objeto Date
+// Función para convertir la fecha en objeto Date
 function convertirAFecha(fechaHora) {
-    const [fecha, hora] = fechaHora.split(" ");
-    const [dia, mes, anio] = fecha.split("/").map(Number);
-    const [horas, minutos] = hora.split(":").map(Number);
-    
-    return new Date(anio, mes - 1, dia, horas, minutos);
+    const fecha = new Date(fechaHora);
+    return fecha;
 }
 
 // Función para agendar un recordatorio y enviar notificación push
-function agregarRecordatorioConNotificacion(titulo, fechaHoraRecordatorio) {
+function agregarRecordatorioConNotificacion(eventName, fechaHoraRecordatorio) {
     const ahora = new Date();
     const fechaObjetivo = convertirAFecha(fechaHoraRecordatorio);
     const dosMinutosAntes = 2 * 60 * 1000; // 2 minutos en milisegundos
@@ -32,40 +40,41 @@ function agregarRecordatorioConNotificacion(titulo, fechaHoraRecordatorio) {
     if (tiempoRestante > 0) {
         setTimeout(function() {
             // Enviar notificación push cuando se cumpla el tiempo
-            mostrarNotificacion(titulo);
+            mostrarNotificacion(eventName);
         }, tiempoRestante);
-        document.getElementById("mensaje").textContent = "Recordatorio agregado exitosamente.";
+        document.getElementById("mensaje").textContent = "Evento agregado exitosamente.";
     } else {
-        document.getElementById("mensaje").textContent = "La fecha del recordatorio ya pasó o es muy cercana.";
+        document.getElementById("mensaje").textContent = "La fecha del evento ya pasó o es muy cercana.";
     }
 }
 
 // Función para mostrar la notificación
-function mostrarNotificacion(titulo) {
+function mostrarNotificacion(eventName) {
     if (Notification.permission === "granted") {
         const opciones = {
-            body: "Es momento de prepararse para: " + titulo,
+            body: "Es momento de prepararse para: " + eventName,
             icon: "https://example.com/icon.png" // Puedes usar una URL a un icono
         };
-        new Notification("Recordatorio (2 minutos antes)", opciones);
+        new Notification("Evento (2 minutos antes)", opciones);
     } else {
         console.log("No se ha dado permiso para notificaciones.");
     }
 }
 
-// Manejar el envío del formulario y pedir permiso de notificación al agregar recordatorio
-document.getElementById("recordatorioForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    const titulo = document.getElementById("titulo").value;
-    const fechaHora = document.getElementById("fechaHora").value;
+// Programar la notificación basada en la fecha del evento
+document.getElementById('eventForm').addEventListener('submit', (e) => {
+    e.preventDefault();
     
-    // Solicitar permiso al usuario antes de agregar el recordatorio
+    const eventName = document.getElementById('eventName').value;
+    const eventDate = document.getElementById('eventDate').value;
+
+    // Solicitar permiso al usuario antes de agregar el evento
     if (Notification.permission === "default" || Notification.permission === "denied") {
         pedirPermisoNotificaciones();
     }
 
-    // Si el permiso es concedido, agregar el recordatorio
+    // Si el permiso es concedido, agregar el evento
     if (Notification.permission === "granted") {
-        agregarRecordatorioConNotificacion(titulo, fechaHora);
+        agregarRecordatorioConNotificacion(eventName, eventDate);
     }
 });
